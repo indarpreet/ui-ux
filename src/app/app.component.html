@@ -1,20 +1,62 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<section class="row">
+    <div class="col" *ngFor="let product of jsonData.groups">
+        <!-- product image divider -->
 
+        <div class="product-container">
+            <div class="image-container">
+                <h3 class="product-name" [innerHTML]="product.name"></h3>
+                <img (click)="openOverlay(product)" src={{product.hero.href}} alt="{{product.hero.rel}}">
+            </div>
+
+            <!-- product name and priceRange -->
+            <div class="product-details">
+
+
+
+                <div class="product-flags">
+                    <ul>
+                        <li class="product-flags-list" *ngFor="let flag of product.flags">
+                            <i [ngClass]="{'icon ion-md-leaf': flag.id === 'organic','icon ion-ios-thumbs-up': flag.id === 'fairTrade'}"></i>
+                            <span [ngClass]="{'flag-text' : flag.id === 'newcore'}">{{getFlagValue(flag)}}</span>
+                        </li>
+                    </ul>
+
+                </div>
+                <div class="product-price">
+                    <div class="product-actual-price"><del> {{product.priceRange.regular.high}} &mdash;
+                            {{product.priceRange.regular.low}} </del> </div>
+                    <div class="product-price-type">{{product.priceRange.type}} </div>
+                    <div class="product-discount-price">
+                        {{product.priceRange.selling.high}} &mdash; {{product.priceRange.selling.low}} </div>
+                </div>
+                <div class="product-messages">
+                    <ul>
+                        <li *ngFor="let message of product.messages">
+                            <span [innerHTML]="getMessage(message)"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<div id="myNav" class="overlay">
+    <a href="#" class="closebtn" (click)="closeOverlay()">&times;</a>
+    <div class="overlay-container">
+        <div class="overlay-image-container">
+            <h3 class="overlay-product-name" [innerHTML]="productName"></h3>
+            <img *ngFor="let imgObj of overlayArray" [ngClass]=" {'hidden': imgObj.hidden}" src={{imgObj.href}} alt="{{imgObj.rel}}">
+
+            <button class="prev" (click)="goPrev()">&#10094;</button>
+            <div class="badge-pos">
+                <span class="badge-btn" [ngClass]="{'badge-bg' : i == overlayIndex}" *ngFor="let imgObj of overlayArray; let i = index" (click)="badgeClick(i)"></span>
+            </div>
+            <button class="next" (click)="goNext()">&#10095;</button>
+
+        </div>
+    </div>
+
+</div>
